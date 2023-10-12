@@ -19,8 +19,12 @@ namespace net_il_mio_fotoalbum.Models
         [Required]
         public bool IsVisible { get; set; }
 
-        [ValidateImgFile]
+        [MaxLength(500, ErrorMessage = "the link length is limited to 500 chars")]
+        public string? ImageUrl { get; set; }
         public byte[]? ImageFile { get; set; }
+
+        public string ImageSrc =>
+            ImageFile is null ? (ImageUrl is null ? "" : ImageUrl) : $"data:image/png;base64,{Convert.ToBase64String(ImageFile)}";
 
         // N:N relation with categories
         public List<Category>? Categories { get; set; }

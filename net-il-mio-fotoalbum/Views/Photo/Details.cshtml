@@ -1,0 +1,38 @@
+﻿@model Photo
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex align-items-center">
+                <h1 class="mt-3 mb-3">Dettagli post</h1>
+            </div>
+            <div class="post-single-image-container">
+                <img width="500" src="@Model.ImageSrc">
+            </div>
+            <p>
+                <strong>Titolo:</strong>
+                @Model.Title
+            </p>
+            <p>
+                <strong>Contenuto:</strong>
+                @Model.Description
+            </p>
+            <p>
+                <strong>Categories:</strong>
+                @if (Model.Categories != null && Model.Categories.Count > 0)
+                {
+                    <ul>
+                        @foreach (Category cat in Model.Categories)
+                        {
+                            <li>@cat.Name</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span>No Categories associated.</span>
+                }
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@model List<Photo>
+
+@if (Model.Count() == 0)
+{
+    <h3>There are no photos to show</h3>
+}
+else
+{
+
+    <div class="container py-3">
+        <h1>Our Pizzas</h1>
+
+        <a class="btn my-5 custom-link"
+           href="@Url.Action("Create", "Photo")">
+            Create a New Photo
+        </a>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Photo</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Categories</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Photo photo in Model)
+                {
+                    @if(photo.IsVisible)
+                    {
+                        <tr>
+                            <th scope="row">@photo.Id</th>
+                            <td><img src="@photo.ImageSrc" alt="@photo.Title" /></td>
+                            <td>@photo.Title</td>
+                            <td>@photo.Description</td>
+                            <td>
+                                @if (photo.Categories?.Count > 0)
+                                {
+                                    @for (var i = 0; i < photo.Categories.Count; i++)
+                                    {
+                                        var category = photo.Categories[i].Name;
+                                        @category
+                                        if (i < photo.Categories.Count - 1)
+                                        {
+                                            @(", ")
+                                        }
+                                        else
+                                        {
+                                            @(". ")
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <small>No Categories associated</small>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
