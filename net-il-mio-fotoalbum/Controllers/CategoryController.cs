@@ -22,7 +22,7 @@ namespace net_il_mio_fotoalbum.Controllers
         [Authorize(Roles = "ADMIN")]
         public IActionResult Index()
         {
-            List<Category> categories = _myDb.Categories.Include(c => c.Photos).ToList();
+            List<Category> categories = _myDb.Categories.ToList();
             return View("Index", categories);
         }
 
@@ -39,13 +39,31 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Log detailed validation errors
+                var validationErrors = ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .ToDictionary(kvp => kvp.Key,
+                                  kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList());
+
+                _logger.LogWarning("Invalid model state for creating a category. Validation errors: {@ValidationErrors}", validationErrors);
+
                 return View("Create", newCategory);
             }
 
-            _myDb.Categories.Add(newCategory);
-            _myDb.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                _myDb.Categories.Add(newCategory);
+                _myDb.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating a category: {@NewCategory}", newCategory);
+                throw;  // Re-throw the exception to display a generic error page
+            }
         }
+
+
 
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
