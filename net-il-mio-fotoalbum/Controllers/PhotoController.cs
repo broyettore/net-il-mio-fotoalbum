@@ -192,16 +192,16 @@ namespace net_il_mio_fotoalbum.Controllers
             }
 
 
-            Photo? pizzaToEdit = _myDb.Photos.Where(p => p.Id == id).Include(p => p.Categories).FirstOrDefault();
+            Photo? photoToEdit = _myDb.Photos.Where(p => p.Id == id).Include(p => p.Categories).FirstOrDefault();
 
-            if (pizzaToEdit != null)
+            if (photoToEdit != null)
             {
-                pizzaToEdit.Categories.Clear();
+                photoToEdit.Categories.Clear();
 
-                pizzaToEdit.Title = data.Photo.Title;
-                pizzaToEdit.Description = data.Photo.Description;
-                pizzaToEdit.ImageUrl = data.Photo.ImageUrl;
-                pizzaToEdit.IsVisible = data.Photo.IsVisible;
+                photoToEdit.Title = data.Photo.Title;
+                photoToEdit.Description = data.Photo.Description;
+                photoToEdit.ImageUrl = data.Photo.ImageUrl;
+                photoToEdit.IsVisible = data.Photo.IsVisible;
 
                 if (data.SelectedCategoriesIds != null)
                 {
@@ -213,7 +213,7 @@ namespace net_il_mio_fotoalbum.Controllers
 
                         if (categoryInDb != null)
                         {
-                            pizzaToEdit.Categories.Add(categoryInDb);
+                            photoToEdit.Categories.Add(categoryInDb);
                         }
                     }
                 }
@@ -222,7 +222,7 @@ namespace net_il_mio_fotoalbum.Controllers
                 {
                     MemoryStream stream = new();
                     data.ImgFormFile.CopyTo(stream);
-                    pizzaToEdit.ImageFile = stream.ToArray();
+                    photoToEdit.ImageFile = stream.ToArray();
                 }
 
                 _myDb.SaveChanges();
