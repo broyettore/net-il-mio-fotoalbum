@@ -12,12 +12,15 @@ else
 {
 
     <div class="container py-3">
-        <h1>Our Pizzas</h1>
+        <h1>Our Photos</h1>
 
-        <a class="btn my-5 custom-link"
-           href="@Url.Action("Create", "Photo")">
-            Create a New Photo
-        </a>
+        @if (User.IsInRole("ADMIN"))
+        {
+            <a class="btn my-5 custom-link"
+               href="@Url.Action("Create", "Photo")">
+                Create a New Photo
+            </a>
+        }
 
         <table class="table">
             <thead>
@@ -32,7 +35,7 @@ else
             <tbody>
                 @foreach (Photo photo in Model)
                 {
-                    @if(photo.IsVisible)
+                    @if (photo.IsVisible)
                     {
                         <tr>
                             <th scope="row">@photo.Id</th>

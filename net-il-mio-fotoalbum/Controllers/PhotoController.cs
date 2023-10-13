@@ -5,6 +5,8 @@ using net_il_mio_fotoalbum.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
@@ -12,38 +14,44 @@ namespace net_il_mio_fotoalbum.Controllers
     {
         private readonly PhotoContext _myDb;
         private readonly ILogger<PhotoController> _logger;
+        private UserManager<IdentityUser> _user_manager;
 
-        public PhotoController(PhotoContext db, ILogger<PhotoController> logger)
+        public PhotoController(PhotoContext db, ILogger<PhotoController> logger, UserManager<IdentityUser> userManager)
         {
             _myDb = db;
             _logger = logger;
+            _user_manager = userManager;
         }
 
         [Authorize(Roles = "ADMIN")]
         public IActionResult Index()
         {
-           List<Photo> photos = _myDb.Photos.Include(p => p.Categories).ToList();
+            ClaimsPrincipal user = User;
+            var userId = _user_manager.GetUserId(user);
+
+           List<Photo> photos = _myDb.Photos.Where(p => p.UserId == userId).Include(p => p.Categories).ToList();
 
             return View("Index", photos);
-        } 
-        
+        }
+
         public IActionResult UserIndex()
         {
-           List<Photo> photos = _myDb.Photos.Include(p => p.Categories).ToList();
+            List<Photo> photos = _myDb.Photos.Include(p => p.Categories).ToList();
 
             return View("UserIndex", photos);
         }
 
         public IActionResult Details(int id)
         {
-            Photo? foundPhoto = _myDb.Photos.Where(p =>  p.Id == id)
+            Photo? foundPhoto = _myDb.Photos.Where(p => p.Id == id)
                 .Include(p => p.Categories)
                 .FirstOrDefault();
 
-            if(foundPhoto == null)
+            if (foundPhoto == null)
             {
                 return NotFound($"The photo with id {id} was not found");
-            } else
+            }
+            else
             {
                 return View("Details", foundPhoto);
             }
@@ -81,7 +89,10 @@ namespace net_il_mio_fotoalbum.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(PhotoFormModel data)
         {
-            if(!ModelState.IsValid)
+            ClaimsPrincipal user = User;
+            var userId = _user_manager.GetUserId(user);
+
+            if (!ModelState.IsValid)
             {
                 List<Category> categories = _myDb.Categories.ToList();
                 List<SelectListItem> AllCategoriesSelectList = new();
@@ -121,6 +132,7 @@ namespace net_il_mio_fotoalbum.Controllers
 
             this.SetImageFileFromFile(data);
 
+            data.Photo.UserId = userId;
             _myDb.Photos.Add(data.Photo);
             _myDb.SaveChanges();
 
@@ -218,7 +230,7 @@ namespace net_il_mio_fotoalbum.Controllers
                     }
                 }
 
-                if(data.ImgFormFile != null)
+                if (data.ImgFormFile != null)
                 {
                     MemoryStream stream = new();
                     data.ImgFormFile.CopyTo(stream);
@@ -258,7 +270,7 @@ namespace net_il_mio_fotoalbum.Controllers
 
         private void SetImageFileFromFile(PhotoFormModel data)
         {
-            if(data.ImgFormFile == null)
+            if (data.ImgFormFile == null)
             {
                 return;
             }

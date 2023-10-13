@@ -134,7 +134,7 @@ namespace net_il_mio_fotoalbum.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await _userManager.AddToRoleAsync(user, "USER");
+                    await _userManager.AddToRoleAsync(user, "ADMIN");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
