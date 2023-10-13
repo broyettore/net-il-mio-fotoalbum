@@ -31,6 +31,9 @@ namespace net_il_mio_fotoalbum.Models
         // N:N relation with categories
         public List<Category>? Categories { get; set; }
 
+        // 1:N relation with messages
+        public List<Message>? Messages { get; set; }
+
 
         public Photo() { }
     }
