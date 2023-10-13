@@ -19,6 +19,6 @@ namespace net_il_mio_fotoalbum.Models
         public int PhotoId { get; set; }
 
         // Navigation property to represent the related photo
-        public Photo Photo { get; set; }
+        public Photo? Photo { get; set; }
     }
 }

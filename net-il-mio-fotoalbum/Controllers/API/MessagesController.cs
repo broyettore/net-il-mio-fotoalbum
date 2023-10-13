@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_il_mio_fotoalbum.Database;
@@ -14,111 +10,56 @@ namespace net_il_mio_fotoalbum.Controllers.API
     [ApiController]
     public class MessagesController : ControllerBase
     {
-        private readonly PhotoContext _context;
 
-        public MessagesController(PhotoContext context)
+        private readonly PhotoContext _myDb;
+
+        public MessagesController(PhotoContext myDb)
         {
-            _context = context;
+            _myDb = myDb;
         }
 
-        // GET: api/Messages
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+
+        [HttpPost]
+        [Route("Create/{photoId}")]
+        public IActionResult Create(int photoId, [FromBody] CreateMessageRequest request)
         {
-          if (_context.Messages == null)
-          {
-              return NotFound();
-          }
-            return await _context.Messages.ToListAsync();
-        }
-
-        // GET: api/Messages/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(int id)
-        {
-          if (_context.Messages == null)
-          {
-              return NotFound();
-          }
-            var message = await _context.Messages.FindAsync(id);
-
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            return message;
-        }
-
-        // PUT: api/Messages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(int id, Message message)
-        {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(message).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MessageExists(id))
+                // Find the photo based on the provided photoId
+                var photo = _myDb.Photos.FirstOrDefault(p => p.Id == photoId);
+
+                if (photo == null)
                 {
-                    return NotFound();
+                    return NotFound("Photo not found");
                 }
-                else
+
+                // Create a new message
+                var message = new Message
                 {
-                    throw;
-                }
+                    Email = request.Email,
+                    MsgContent = request.MsgContent,
+                    Photo = photo
+                };
+
+                _myDb.Messages.Add(message);
+                _myDb.SaveChanges();
+
+                return Ok();
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Messages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
-        {
-          if (_context.Messages == null)
-          {
-              return Problem("Entity set 'PhotoContext.Messages'  is null.");
-          }
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
-        }
-
-        // DELETE: api/Messages/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMessage(int id)
-        {
-            if (_context.Messages == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { ex.Message });
             }
-            var message = await _context.Messages.FindAsync(id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            _context.Messages.Remove(message);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool MessageExists(int id)
+        // Request model for creating a message
+        public class CreateMessageRequest
         {
-            return (_context.Messages?.Any(e => e.Id == id)).GetValueOrDefault();
+            public string Email { get; set; }
+            public string MsgContent { get; set; }
         }
+
+
+
     }
 }

@@ -29,14 +29,14 @@ namespace net_il_mio_fotoalbum.Controllers
             ClaimsPrincipal user = User;
             var userId = _user_manager.GetUserId(user);
 
-           List<Photo> photos = _myDb.Photos.Where(p => p.UserId == userId).Include(p => p.Categories).ToList();
+           List<Photo> photos = _myDb.Photos.Where(p => p.UserId == userId).Include(p => p.Categories).Include(p => p.Messages).ToList();
 
             return View("Index", photos);
         }
 
         public IActionResult UserIndex()
         {
-            List<Photo> photos = _myDb.Photos.Include(p => p.Categories).ToList();
+            List<Photo> photos = _myDb.Photos.Include(p => p.Categories).Include(p => p.Messages).ToList();
 
             return View("UserIndex", photos);
         }
@@ -45,6 +45,7 @@ namespace net_il_mio_fotoalbum.Controllers
         {
             Photo? foundPhoto = _myDb.Photos.Where(p => p.Id == id)
                 .Include(p => p.Categories)
+                .Include(p => p.Messages)
                 .FirstOrDefault();
 
             if (foundPhoto == null)

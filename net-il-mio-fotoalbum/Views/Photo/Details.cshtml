@@ -33,17 +33,26 @@
         {
             <span>No Categories associated.</span>
         }
-    </p>    
+    </p>
+
+    <hr />
+
+    <div class="my-4 header-anchor">
+        <h2 class="ms-header fs-3">Messages Received - @Model.Title</h2>
+    </div>
+
     <p class="fs-5">
-        <strong>Messages:</strong>
-        @if (@Model.Messages?.Count > 0)
+        @if (Model.Messages?.Count > 0)
         {
-           <ul>
-                @foreach(Message msg in Model.Messages)
+            <ul>
+                @foreach (Message msg in Model.Messages)
                 {
-                    <li>@msg</li>
+                    <li class="mb-3">
+                        <strong>From:</strong> @msg.Email<br />
+                        <strong>Message Content:</strong> @msg.MsgContent
+                    </li>
                 }
-           </ul>
+            </ul>
         }
         else
         {
