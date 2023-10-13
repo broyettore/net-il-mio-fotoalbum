@@ -19,7 +19,7 @@ namespace net_il_mio_fotoalbum.Controllers.API
         }
 
         [HttpGet]
-        public IActionResult GetPizzas()
+        public IActionResult GetPhotos()
         {
             List<Photo> photos = _myDb.Photos.Include(p => p.Categories).ToList();
 
