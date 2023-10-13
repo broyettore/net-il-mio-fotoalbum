@@ -1,22 +1,22 @@
 ﻿@model Category
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h1>Create A New Category</h1>
-        </div>
-        <form asp-controller="Category" asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
-            <div class="mb-3">
-                <strong>Category Name:</strong>
-                <input type="text" class="form-control" asp-for="Name">
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+<div class="container px-0">
 
-
-            <input type="hidden" asp-for="Photos" class="form-control" name="Photos">
-
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+    <div class="mb-5 header-anchor">
+        <h2 class="ms-header fs-1">Create A Category</h2>
     </div>
+    <form asp-controller="Category" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div class="mb-4">
+            <strong>Category Name:</strong>
+            <input type="text" class="form-control" asp-for="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+
+        <input type="hidden" asp-for="Photos" class="form-control" name="Photos">
+
+        <button type="submit" class="btn my-btn">Create</button>
+    </form>
+
 </div>

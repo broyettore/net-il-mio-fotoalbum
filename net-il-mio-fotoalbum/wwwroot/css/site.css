@@ -5,7 +5,8 @@
 }
 /******** COMMON styling *********************/
 body {
-    background-color: #FFF5E0;
+    background-color: #e9e7e7;
+    color: #064e3b;
 }
 
 
@@ -35,3 +36,84 @@ a:hover {
     transition: all ease;
 }
 
+a {
+    text-decoration: none;
+    color: #064e3b;
+}
+
+input {
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 4px 8px;
+    margin-top: 5px;
+    border: 2px solid #064e3b;
+    background-color: #404040;
+    color: whitesmoke;
+}
+/**************** HEADER *************/
+header a {
+    font-weight: 600;
+}
+
+.custom-link:hover, #manage:hover, #register:hover, #login:hover {
+    color: cornflowerblue;
+    transition: all .40s;
+}
+
+.my-btn, .crud-btn {
+    font-weight: 600;
+    padding: 8px 14px;
+    background-color: #d10065;
+    color: whitesmoke;
+}
+
+.my-btn-i {
+    font-weight: 600;
+    padding: 6px 10px;
+    background-color: #d10065;
+    color: whitesmoke;
+    display: inline-block;
+}
+
+.delete-form {
+    display: inline-block;
+}
+
+.my-btn:hover, .my-btn-i:hover {
+    color: whitesmoke;
+    transform: scale(1.1);
+    transition: ease .30s;
+}
+
+.header-anchor {
+    position: relative;
+}
+
+.ms-header::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 5%;
+    height: 2px; /* Adjust the height of the line as needed */
+    background-color: #064e3b;
+}
+
+.crud-btn:hover {
+    background-color: transparent;
+    border: 1px solid #d10065;
+    color: #064e3b;
+    transform: translateY(-6px);
+    transition: all .30s;
+}
+
+.detail-img {
+    border-radius: 15px;
+    s
+}
+
+/********************** MAIN *********************/
+
+.ms-th {
+    width: 12%;
+}
