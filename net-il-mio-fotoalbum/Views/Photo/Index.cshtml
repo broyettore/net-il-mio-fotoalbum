@@ -6,7 +6,12 @@
 
 @if (Model.Count() == 0)
 {
-    <h3>There are no photos to show</h3>
+    <h3 class="mb-4">There are no photos to show</h3>
+
+    <a class="btn my-5 crud-btn"
+       href="@Url.Action("Create", "Photo")">
+        Create a New Photo
+    </a>
 }
 else
 {

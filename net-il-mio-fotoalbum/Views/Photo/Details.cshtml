@@ -33,5 +33,21 @@
         {
             <span>No Categories associated.</span>
         }
+    </p>    
+    <p class="fs-5">
+        <strong>Messages:</strong>
+        @if (@Model.Messages?.Count > 0)
+        {
+           <ul>
+                @foreach(Message msg in Model.Messages)
+                {
+                    <li>@msg</li>
+                }
+           </ul>
+        }
+        else
+        {
+            <span>No Messages Received.</span>
+        }
     </p>
 </div>
